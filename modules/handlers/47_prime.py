@@ -16,7 +16,7 @@ class Handler(handlers.MsgHandler):
     last = {}
     url = re.compile("http(s)?://([\w\-]+\.)+[\w\-]+([\w\-./?%&=]*)?")
     def process(self, sc, data):
-        text = url.sub("", data['text'])
+        text = self.url.sub("", data['text'])
         print(text)
         ch = data['channel']
         isAsk = "isprime" in text
