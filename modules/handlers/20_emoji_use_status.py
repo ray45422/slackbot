@@ -26,7 +26,7 @@ class Handler(handlers.MsgHandler):
         return True
 
     def ranking(self, sc, data):
-        con = sqlite3.connect(datautil.basedir / "data/emojiuse.db")
+        con = sqlite3.connect(datautil.dataDir / "emojiuse.db")
         msgs = []
         query = "select userid, count(*)-(select count(*) from emojiuse B where A.name=B.name and B.del=1) n from emojiuse A where del=0 group by userid order by n desc"
         cur = con.execute(query)
@@ -99,7 +99,7 @@ class Handler(handlers.MsgHandler):
         else:
             where = ''
             paramlist = []
-        con = sqlite3.connect(datautil.basedir / "data/emojiuse.db")
+        con = sqlite3.connect(datautil.dataDir / "emojiuse.db")
         query = "select date(min(datetime)), date(max(datetime)) from emojiuse where del=0" + where
         cur = con.execute(query, paramlist)
         period = cur.fetchone()

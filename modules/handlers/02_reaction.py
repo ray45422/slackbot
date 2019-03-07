@@ -4,7 +4,7 @@ import modules.slack as slack
 import sqlite3
 
 class Handler(MsgHandler):
-    fileName = datautil.basedir / 'data/emojiuse.db'
+    fileName = datautil.dataDir / 'emojiuse.db'
     tablename = 'emojiuse'
     con = None
     def __init__(self):

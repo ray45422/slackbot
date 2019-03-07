@@ -41,7 +41,7 @@ try:
                 handlers.onEvent(slack.client, d)
         except Exception as e:
             name = "error" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S") + ".txt"
-            f = open(datautil.basedir / "./errors/" / name, 'w')
+            f = open(datautil.errorDir / name, 'w')
             f.write(traceback.format_exc())
             f.close()
             msg = "<@" + slack.getClient().notifyUserID + ">"

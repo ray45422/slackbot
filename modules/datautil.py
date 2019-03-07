@@ -19,3 +19,10 @@ def saveJson(obj, fileName):
     json.dump(obj, fp=f)
     f.close()
 
+dataDir = basedir / "data"
+errorDir = basedir / "errors"
+if not dataDir.exists():
+    dataDir.mkdir()
+if not errorDir.exists():
+    errorDir.mkdir()
+
