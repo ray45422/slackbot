@@ -32,10 +32,10 @@ if not sc.rtm_connect(auto_reconnect=True):
 try:
     while sc.server.connected is True:
         sys.stdout.flush()
-        time.sleep(0.1)
         data = sc.rtm_read()
         try:
             if len(data) == 0:
+                time.sleep(0.1)
                 continue
             for d in data:
                 handlers.onEvent(slack.client, d)
