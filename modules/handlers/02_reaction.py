@@ -42,6 +42,17 @@ class Handler(MsgHandler):
         if t == 'reaction_removed':
             delete = 1
         cur = self.con.cursor()
+        cur.execute("select count(*) from " + self.tablename + " where name=? and userid=? group by del order by del", (name, user))
+        result = cur.fetchall()
+        count = 0
+        print(result)
+        if len(result) >= 2:
+            count = result[0][0] - result[1][0]
+        elif len(result) > 0:
+            count = result[0][0]
+        print(count)
+        if count <= 0 and delete == 1:
+            return False
         cur.execute("insert into " + self.tablename + " values(?,CURRENT_TIMESTAMP,?,?)", (name, user, delete))
         self.con.commit()
         return False

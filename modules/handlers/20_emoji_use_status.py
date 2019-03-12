@@ -38,6 +38,8 @@ class Handler(handlers.MsgHandler):
             cur = con.execute(query, [row[0]])
             use = cur.fetchone()
             n = use[0]
+            if n < 1:
+                continue
             user = sc.getUserByID(row[0])
             msg = str(rank) + "位:"+ user['name'] + " " + str(row[1]) + "回 よく使う絵文字:" + use[1] + ":"
             while True:
@@ -118,7 +120,7 @@ class Handler(handlers.MsgHandler):
         mx = len(str(mx))
         n = 0
         for row in result:
-            if row[1] == 0:
+            if row[1] < 1:
                 continue
             if row[1] == n:
                 msgs[-1] += ":" + row[0] + ":"
