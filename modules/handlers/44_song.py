@@ -20,15 +20,16 @@ class Handler(MsgHandler):
     def process(self, sc, data):
         text = data['text']
         ch = data['channel']
+        chStr = "<#" + ch + ">"
         ts = data['ts']
         stcs = song.split(text)
         ret = song.isHaiku(stcs)
         if ret[0]:
             sc.addReactions(ch, ts, ["haiku"])
-            sc.rtm_send_message(sc.notifyCh, "俳句を検出しました\n" + "\n".join(ret[1]))
+            sc.rtm_send_message(sc.notifyCh, chStr + "\n俳句を検出しました\n" + "\n".join(ret[1]))
         ret = song.isTanka(stcs)
         if ret[0]:
             sc.addReactions(ch, ts, ["tanka"])
-            sc.rtm_send_message(sc.notifyCh, "短歌を検出しました\n" + "\n".join(ret[1]))
+            sc.rtm_send_message(sc.notifyCh, chStr + "\n短歌を検出しました\n" + "\n".join(ret[1]))
         return True
 
