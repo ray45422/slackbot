@@ -88,6 +88,11 @@ class Slack():
             if ch['name'] == name:
                 return ch
         return None
+    def getChannelByID(self, id):
+        chs = self.getChannels()
+        if id in chs:
+            return chs[id]
+        return None
 
     def getUsers(self):
         if not self.canUpdate('usr'):

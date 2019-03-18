@@ -16,8 +16,12 @@ class Handler(MsgHandler):
     lastUser = ''
     lastCh = ''
     def process(self, sc, d):
-        user = sc.getUsers()[d['user']]['name']
-        ch = sc.getChannels()[d['channel']]['name']
+        user = sc.getUserByID(d['user'])
+        ch = sc.getChannelByID(d['channel'])
+        if user or ch:
+            return False
+        user = user['name']
+        ch = ch['name']
         if self.lastUser == user and self.lastCh == ch:
             return False
         print(user, "is typing in", "#" + ch)
