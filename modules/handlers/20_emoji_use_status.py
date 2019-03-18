@@ -78,20 +78,20 @@ class Handler(handlers.MsgHandler):
             f = d['fromd']
             t = d['tod']
             if f is not None and t is not None:
-                w = "date(datetime(datetime, 'localtime')) between ? and ?"
+                w = "date(datetime, 'localtime') between ? and ?"
                 wherelist.append(w)
                 paramlist.append(f.replace("/", "-"))
                 paramlist.append(t.replace("/", "-"))
             elif f is None:
-                w = "date(datetime(datetime, 'localtime')) <= ?"
+                w = "date(datetime, 'localtime') <= ?"
                 wherelist.append(w)
                 paramlist.append(t.replace("/", "-"))
             else:
-                w = "date(datetime(datetime, 'localtime')) >= ?"
+                w = "date(datetime, 'localtime') >= ?"
                 wherelist.append(w)
                 paramlist.append(f.replace("/", "-"))
         if d['date'] is not None:
-            w = "date(datetime(datetime, 'localtime')) = ?"
+            w = "date(datetime, 'localtime') = ?"
             wherelist.append(w)
             paramlist.append(d['date'].replace("/", "-"))
         if d['order'] is not None:
@@ -102,7 +102,7 @@ class Handler(handlers.MsgHandler):
             where = ''
             paramlist = []
         con = sqlite3.connect(datautil.dataDir / "emojiuse.db")
-        query = "select date(min(datetime)), date(max(datetime)) from emojiuse where del=0" + where
+        query = "select date(min(datetime), 'localtime'), date(max(datetime), 'localtime') from emojiuse where del=0" + where
         cur = con.execute(query, paramlist)
         period = cur.fetchone()
         query = "select name, count(*)-(select count(*) from emojiuse B where A.name=B.name and B.del=1) n from emojiuse A where del=0" + where + " group by name having n<>0 order by n " + order
