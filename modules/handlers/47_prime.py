@@ -3,6 +3,7 @@ import re
 import subprocess
 
 class Handler(handlers.MsgHandler):
+    min = 4000
     max = 2 ** 256 + 1
     def description(self):
         return "数字が素数か判定します"
@@ -25,11 +26,14 @@ class Handler(handlers.MsgHandler):
         skips = []
         msgs = []
         for i in range(len(li)):
-            n = li.pop(0)
-            if int(n) > self.max:
-                skips.append(n)
-            else :
-                l.append(n)
+            nStr = li.pop(0)
+            n = int(nStr)
+            if not isAsk and n < self.min:
+                continue
+            if n > self.max:
+                skips.append(nStr)
+            else:
+                l.append(nStr)
         if len(l) == 0:
             if isAsk and len(skips) != 0:
                 msg = "と".join(skips) + "は大きいのでスキップしました"
@@ -45,8 +49,6 @@ class Handler(handlers.MsgHandler):
             if len(arr) == 1:
                 continue
             org = int(arr.pop(0).replace(':', ''))
-            if not isAsk and org < 100:
-                continue
             isPrime = len(arr) == 1
             if isPrime:
                 org = str(org)
