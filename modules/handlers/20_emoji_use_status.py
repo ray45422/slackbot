@@ -14,7 +14,7 @@ class Handler(handlers.MsgHandler):
                 r"(?P<date>\d{4}/\d{1,2}/\d{1,2})",
                 r"(?P<order>asc|desc)"
             ]
-        reg = r"<@\w+>\s*emojistatus(?:\s+(?:" + "|".join(optlist) + "))*"
+        reg = r"emojistatus(?:\s+(?:" + "|".join(optlist) + "))*"
         self.cmdreg = re.compile(reg)
     def description(self):
         return "絵文字の使用状況を報告します。"
@@ -64,10 +64,8 @@ asc|desc: 昇順の場合"asc"、降順の場合"desc"を指定します。"""
         return False
 
     def process(self, sc, data):
-        if not sc.isMention(data):
-            return True
         text = data['text']
-        if re.match(r"<@\w+>\s*emojistatus\s+ranking$", text):
+        if re.match(r"emojistatus\s+ranking$", text):
             return self.ranking(sc, data)
         mat = self.cmdreg.match(text)
         if mat is None:
