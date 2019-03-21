@@ -4,7 +4,13 @@ import random
 
 class Handler(handlers.MsgHandler):
     def description(self):
-        return "サイコロを振ります"
+        return "サイコロを振ります。使用方法は「(回数)D(出目の数)」(各数字は1以上の整数)(かっこは不要)です"
+
+    def descriptionDetail(self):
+        return """出目の数と回数を指定してサイコロをシミュレートします。
+例えば「1D6」と発言すると6面ダイス(出目は1~6)を1回振った結果を返します。
+複数回を指定した場合は合計と、文字数が長すぎない場合に内訳を表示します。
+"""
     
     def eventType(self):
         return {'type': 'message', 'subtype': None}

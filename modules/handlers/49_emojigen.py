@@ -11,6 +11,13 @@ class Handler(MsgHandler):
     regex = re.compile("emojigen\s+(?P<name>\w+)\s+(?P<text>.+)\s+(?P<color>#[0-9a-fA-F]{6})$")
     def description(self):
         return "絵文字を生成します"
+
+    def description(self):
+        return """>emojigen name text color
+name: 作成する文字絵文字の名前を指定します。
+text: 文字列を指定します。
+color: 色を指定します。指定方法はHTMLカラーコードです。
+"""
     
     def eventType(self):
         return {'type': 'message', 'subtype': None}

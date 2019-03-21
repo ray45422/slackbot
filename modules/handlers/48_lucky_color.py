@@ -3,7 +3,7 @@ import random
 
 class Handler(handlers.MsgHandler):
     def description(self):
-        return "なんか適当な色を選択してラッキーカラーと言い張ります"
+        return "「ラッキーカラー」と発言すると適当な色を作成します"
     
     def eventType(self):
         return {'type': 'message', 'subtype': None}

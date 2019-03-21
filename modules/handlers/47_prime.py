@@ -6,7 +6,12 @@ class Handler(handlers.MsgHandler):
     min = 4000
     max = 2 ** 256 + 1
     def description(self):
-        return "数字が素数か判定します"
+        return "素数か判定します"
+
+    def descriptionDetail(self):
+        return "メッセージ中の数字が素数か判定します。その場合" + str(self.min) + "以下の数字は判定しません。" +"""
+「isprime 数字」で1以上の数字で判定もします。素数ではなかった場合には素因数分解します。数字は複数指定できます。
+"""
     
     def eventType(self):
         return {'type': 'message', 'subtype': None}

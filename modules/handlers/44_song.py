@@ -9,7 +9,7 @@ class Handler(MsgHandler):
         return "song"
 
     def description(self):
-        return "メッセージで俳句か短歌を見つけたときにリアクションします"
+        return "メッセージが俳句か短歌であると思われる場合にリアクションします"
 
     def isPublic(self):
         return True

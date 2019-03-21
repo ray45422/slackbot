@@ -5,6 +5,23 @@ import modules.response as response
 class Handler(MsgHandler):
     def description(self):
         return "登録された返信メッセージを処理します"
+
+    def descriptionDetail(self):
+        return """登録されたパターンに対応する返信、もしくはリアクションを行います。
+パターン登録変更方法:
+> responseset パターン(正規表現)
+> 返信
+    正規表現については <https://docs.python.org/ja/3.7/library/re.html|ここ> を参照。
+    返信は改行するごとにパターンを増やせます。その場合どれが選ばれるかはランダムです。
+    すでに同じパターンが存在していた場合は上書きされます。
+    返信は「+」から始めて絵文字を書き連ねるとその絵文字でリアクションをつけます。返信してかつリアクションをつけることは現時点ではできません。
+パターン削除方法:
+> responsedel パターン
+    指定したパターンを削除します。
+パターン一覧:
+> responselist
+    これで見ることができますが、あまり見やすくないので <https://slack.ray45422.net/|Web> で確認することをおすすめします。
+"""
     
     def isPublic(self):
         return True

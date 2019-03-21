@@ -17,8 +17,18 @@ class Handler(handlers.MsgHandler):
         reg = r"<@\w+>\s*emojistatus(?:\s+(?:" + "|".join(optlist) + "))*"
         self.cmdreg = re.compile(reg)
     def description(self):
-        return "絵文字の使用状況を報告します"
+        return "絵文字の使用状況を報告します。"
     
+    def descriptionDetail(self):
+        return """>emojistatus [ranking] [help] [[@user] [[集計開始日]-[集計終了日]] [集計日] [asc|desc]]
+ranking: ユーザーごとにランキング形式で表示します。
+help: 説明を表示します。
+@user: ユーザーへのメンション
+日付: スラッシュ"/"区切りの「西暦/月/日」の形式です。
+[集計開始日]-[集計終了日]: 指定する場合はどちらか片方が必要です。1日だけ指定する場合は集計日を使用してください。
+集計日: 集計する日を指定します。
+asc|desc: 昇順の場合"asc"、降順の場合"desc"を指定します。"""
+
     def eventType(self):
         return {'type': 'message', 'subtype': None}
 

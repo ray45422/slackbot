@@ -23,7 +23,7 @@ class MsgHandler(metaclass=ABCMeta):
     def description(self):
         pass
     def descriptionDetail(self):
-        return "説明がありません"
+        return self.description()
     def author(self):
         return "ray45422"
     @abstractmethod

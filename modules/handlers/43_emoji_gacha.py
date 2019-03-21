@@ -9,7 +9,7 @@ class Handler(MsgHandler):
         return "emoji_gacha"
 
     def description(self):
-        return "「絵文字(n連)ガチャ」(" + str(self.count) + "≧n＞0)と発言すると、リアクションが付きます。"
+        return "「絵文字(n連)ガチャ」(" + str(self.count) + "≧n≧1)と発言すると、リアクションが付きます"
     
     def eventType(self):
         return {'type': 'message', 'subtype': None}
