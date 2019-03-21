@@ -6,7 +6,12 @@ class Handler(handlers.MsgHandler):
         return "help"
 
     def description(self):
-        return "この機能です"
+        return "この機能です。「help コマンド名」とすると各コマンドの詳しい説明を確認できます。"
+
+    def descriptionDetail(self):
+        return """>help [コマンド名]
+コマンド名: helpで出てくるコマンド名を使用してください。
+"""
     
     def eventType(self):
         return {'type': 'message', 'subtype': None}
@@ -14,16 +19,25 @@ class Handler(handlers.MsgHandler):
     def isPublic(self):
         return True
 
+    pattern = re.compile("(help|man)(\s+(?P<cmd>.+))?")
     def process(self, sc, data):
-        if not sc.isMention(data):
-            return True
         text = data['text']
-        if "help" not in text:
+        mat = self.pattern.match(text)
+        if mat is None:
             return True
+        cmd = mat.groupdict()['cmd']
         msgs = []
         all = False
-        if "all" in text:
-            all = True
+        if cmd is not None:
+            if cmd == "all":
+                all = True
+            else:
+                handler = handlers.getHandler(cmd)
+                if handler is None:
+                    sc.rtm_send_message(data['channel'], "指定されたコマンドが見つかりません(" + cmd + ")")
+                    return False
+                sc.rtm_send_message(data['channel'], handler.descriptionDetail())
+                return False
         keys = sorted(handlers.handlers)
         for key in keys:
             h = handlers.handlers[key]

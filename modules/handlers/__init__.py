@@ -2,6 +2,7 @@ from pathlib import Path
 from abc import ABCMeta, abstractmethod
 import re
 import importlib
+import traceback
 
 class MsgHandler(metaclass=ABCMeta):
     _name = None
@@ -21,6 +22,10 @@ class MsgHandler(metaclass=ABCMeta):
     @abstractmethod
     def description(self):
         pass
+    def descriptionDetail(self):
+        return "説明がありません"
+    def author(self):
+        return "ray45422"
     @abstractmethod
     def process(self, sc, data):
         pass
@@ -37,6 +42,14 @@ class MsgHandler(metaclass=ABCMeta):
         self._pri = int(m.groupdict()['pri'])
         return self._pri
 
+class HandlerException(Exception):
+    handler = None
+    exception = None
+    traceback = None
+    def __init__(self, handler, exception):
+        self.handler = handler
+        self.exception = exception
+        self.traceback = traceback.format_exc()
 
 def _moduleLoad():
     reg = re.compile("\d+_.+")
@@ -53,7 +66,7 @@ def addHandler(handler):
 
 def getHandler(name):
     for h in handlers.values():
-        if h.name == name:
+        if h.name() == name:
             return h
     return None
 
@@ -88,8 +101,11 @@ def onEvent(sc, data):
         h = handlers[key]
         if not eventMatch(data, h):
             continue
-        if not h.process(sc, data):
-            return
+        try:
+            if not h.process(sc, data):
+                return
+        except Exception as e:
+            raise HandlerException(h, e)
 
 def eventMatch(d, h):
     filter = h.eventType()
