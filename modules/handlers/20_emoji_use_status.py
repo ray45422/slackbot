@@ -134,7 +134,7 @@ asc|desc: 昇順の場合"asc"、降順の場合"desc"を指定します。"""
                 msgs[-1] += ":" + row[0] + ":"
                 continue
             n = row[1]
-            msg = str(row[1]).zfill(mx) + "回::" + row[0] + ": "
+            msg = str(row[1]).zfill(mx) + "回::" + row[0] + ":"
             msgs.append(msg)
         con.close()
         msg = "\n".join(msgs)
