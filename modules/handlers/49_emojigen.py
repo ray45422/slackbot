@@ -12,7 +12,7 @@ class Handler(MsgHandler):
     def description(self):
         return "絵文字を生成します"
 
-    def description(self):
+    def descriptionDetail(self):
         return """>emojigen name text color
 name: 作成する文字絵文字の名前を指定します。
 text: 文字列を指定します。
