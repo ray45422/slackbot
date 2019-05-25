@@ -9,7 +9,11 @@ class Handler(MsgHandler):
         return "song"
 
     def description(self):
-        return "メッセージが俳句か短歌であると思われる場合にリアクションします"
+        return """メッセージが俳句か短歌であると思われる場合にリアクションします"""
+
+    def descriptionDetail(self):
+        return """メッセージが俳句か短歌であると思われる場合にリアクションします
+haikucheck [テキスト] で分節分解などの情報を表示します"""
 
     def isPublic(self):
         return True
@@ -20,6 +24,17 @@ class Handler(MsgHandler):
     def process(self, sc, data):
         text = data['text']
         ch = data['channel']
+        if text.startswith("haikucheck "):
+            text = re.sub("haikucheck ", "", text)
+            stcs = song.split(text)
+            msgs = ["["]
+            for stc in stcs:
+                for word in stc:
+                    msgs.append("    [" + ", ".join(word) + "]")
+                msgs.append("], [")
+            msg = "\n".join(msgs)
+            re.sub(r", \[$", "", msg)
+            sc.rtm_send_message(ch, msg)
         chStr = "<#" + ch + ">"
         ts = data['ts']
         stcs = song.split(text)
