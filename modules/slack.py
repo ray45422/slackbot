@@ -121,6 +121,8 @@ class Slack():
             if usr['name'] == name:
                 return usr
         return None
+    def postMessage(self, channel, text):
+        return self.sc.api_call("chat.postMessage", channel=channel, text=text)
 
     def getEmoji(self):
         if not self.canUpdate('emoji'):
