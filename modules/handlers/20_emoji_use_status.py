@@ -6,6 +6,7 @@ import modules.datautil as datautil
 
 class Handler(handlers.MsgHandler):
     cmdreg = None
+    listMaxCount = 40
     def __init__(self):
         optlist = [
                 r"(?::(?P<emoji>[^:]+):)",
@@ -113,7 +114,7 @@ asc|desc: 昇順の場合"asc"、降順の場合"desc"を指定します。"""
         query = "select date(min(datetime), 'localtime'), date(max(datetime), 'localtime') from emojiuse where del=0" + where
         cur = con.execute(query, paramlist)
         period = cur.fetchone()
-        query = "select name, count(*)-(select count(*) from emojiuse B where A.name=B.name and B.del=1) n from emojiuse A where del=0" + where + " group by name having n<>0 order by n " + order
+        query = "select name, count(*)-(select count(*) from emojiuse B where A.name=B.name and B.del=1) n from emojiuse A where del=0" + where + " group by name having n<>0 order by n " + order + " limit " + str(self.listMaxCount)
         #print(query)
         #print(paramlist)
         cur = con.execute(query, paramlist)
