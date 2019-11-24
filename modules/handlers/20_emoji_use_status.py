@@ -3,6 +3,7 @@ import re
 import sqlite3
 import modules.slack as slack
 import modules.datautil as datautil
+import modules.db as db
 
 class Handler(handlers.MsgHandler):
     cmdreg = None
@@ -37,16 +38,15 @@ asc|desc: 昇順の場合"asc"、降順の場合"desc"を指定します。"""
         return True
 
     def ranking(self, sc, data):
-        con = sqlite3.connect(datautil.dataDir / "emojiuse.db")
         msgs = []
         query = "select userid, count(*)-(select count(*) from emojiuse B where A.name=B.name and B.del=1) n from emojiuse A where del=0 group by userid order by n desc"
-        cur = con.execute(query)
+        cur = db.execute(query)
         result = cur.fetchall()
         rank = 0
         for row in result:
             rank += 1
             query = "select count(*)-(select count(*) from emojiuse B where A.name=B.name and B.del=1) n, name from emojiuse A where A.del=0 and A.userid=? group by name order by n desc"
-            cur = con.execute(query, [row[0]])
+            cur = db.execute(query, [row[0]])
             use = cur.fetchone()
             n = use[0]
             if n < 1:
@@ -61,7 +61,6 @@ asc|desc: 昇順の場合"asc"、降順の場合"desc"を指定します。"""
             msg += str(n) + "回"
             msgs.append(msg)
         sc.rtm_send_message(data['channel'], "\n".join(msgs))
-        con.close()
         return False
 
     def process(self, sc, data):
@@ -110,14 +109,13 @@ asc|desc: 昇順の場合"asc"、降順の場合"desc"を指定します。"""
         else:
             where = ''
             paramlist = []
-        con = sqlite3.connect(datautil.dataDir / "emojiuse.db")
         query = "select date(min(datetime), 'localtime'), date(max(datetime), 'localtime') from emojiuse where del=0" + where
-        cur = con.execute(query, paramlist)
+        cur = db.execute(query, paramlist)
         period = cur.fetchone()
         query = "select name, count(*)-(select count(*) from emojiuse B where A.name=B.name and B.del=1) n from emojiuse A where del=0" + where + " group by name having n<>0 order by n " + order + " limit " + str(self.listMaxCount)
         #print(query)
         #print(paramlist)
-        cur = con.execute(query, paramlist)
+        cur = db.execute(query, paramlist)
         msgs = []
         if period is not None:
             msgs.append("集計期間:" + period[0] + "~" + period[1])
@@ -137,7 +135,6 @@ asc|desc: 昇順の場合"asc"、降順の場合"desc"を指定します。"""
             n = row[1]
             msg = str(row[1]).zfill(mx) + "回::" + row[0] + ":"
             msgs.append(msg)
-        con.close()
         msg = "\n".join(msgs)
         if msg == '':
             msg = "該当するものはありませんでした"
