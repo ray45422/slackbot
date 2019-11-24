@@ -4,7 +4,7 @@ import modules.db as db
 
 class Handler(MsgHandler):
     tableName = 'A_WORD_TODAY'
-    name = "剛体語録"
+    wakeword = "剛体語録"
     addPat = None
     def __init__(self):
         cur = db.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name=?", [self.tableName])
@@ -12,15 +12,15 @@ class Handler(MsgHandler):
         if count == 0:
             print("table created: " + self.tableName)
             db.execute("CREATE TABLE " + self.tableName + "(insuser, instime, text)")
-        self.addPat = re.compile(r"^" + self.name + "追加 ")
+        self.addPat = re.compile(r"^" + self.wakeword + "追加 ")
 
     def description(self):
-        return self.name + "です"
+        return self.wakeword + "です"
 
     def descriptionDetail(self):
-        return "登録された" + self.name + """から一つランダムに出力します。
+        return "登録された" + self.wakeword + """から一つランダムに出力します。
 追加方法:
-> """ + self.name + """追加 [ここに追加したい文字列]
+> """ + self.wakeword + """追加 [ここに追加したい文字列]
 パターン削除方法:
 > hoge
     まだ
@@ -40,7 +40,7 @@ class Handler(MsgHandler):
         channel = data['channel']
         ts = data['ts']
         user = data['user']
-        if text == self.name:
+        if text == self.wakeword:
             cur = db.execute("SELECT text FROM A_WORD_TODAY ORDER BY RANDOM() LIMIT 1")
             result = cur.fetchone()
             if result is None:
